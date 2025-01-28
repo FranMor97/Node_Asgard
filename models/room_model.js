@@ -20,7 +20,6 @@ const HabitacionSchema = new mongoose.Schema({
       android:[ { type: String }], // URL de la imagen en Android
       wpf: [{ type: String }], // URL de la imagen en WPF
     },
-  
   habilitada: { type: Boolean, required: true, default: true }, // Estado de disponibilidad
 });
 
