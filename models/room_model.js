@@ -17,7 +17,7 @@ const HabitacionSchema = new mongoose.Schema({
   descripcion: { type: String }, // Descripción opcional
   imagenes: 
     {
-      android: [{ type: String }], // URL de la imagen en Android
+      android:[ { type: String }], // URL de la imagen en Android
       wpf: [{ type: String }], // URL de la imagen en WPF
     },
   
