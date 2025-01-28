@@ -1,5 +1,10 @@
-use("hotel"); //hotel
+//using hotel database
+use("hotel");
 
+//delete all rooms
+db.habitaciones.deleteMany({});
+
+//insert rooms
 db.habitaciones.insertMany([
   {
     codigo: "HAB001",
