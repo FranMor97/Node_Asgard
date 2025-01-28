@@ -15,12 +15,12 @@ const HabitacionSchema = new mongoose.Schema({
   numPersonas: { type: Number, required: true }, // Número de personas permitidas
   precio: { type: Number, required: true }, // Precio por noche
   descripcion: { type: String }, // Descripción opcional
-  imagenes: [
+  imagenes: 
     {
-      android: { type: String }, // URL de la imagen en Android
-      wpf: { type: String }, // URL de la imagen en WPF
+      android: [{ type: String }], // URL de la imagen en Android
+      wpf: [{ type: String }], // URL de la imagen en WPF
     },
-  ],
+  
   habilitada: { type: Boolean, required: true, default: true }, // Estado de disponibilidad
 });
 

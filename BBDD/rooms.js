@@ -1,5 +1,5 @@
-use(hotel); //hotel
-
+use("hotel"); //hotel
+  
 db.habitaciones.insertMany([
   {
     "codigo": "HAB001",
