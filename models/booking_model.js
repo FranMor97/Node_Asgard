@@ -11,7 +11,7 @@ const ReservaSchema = new Schema({
     required: true
   },
   usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
-  precio: { type: Schema.Types.Double, required: true }
+  precio: { type: Number, required: true }
 })
 
 module.exports = mongoose.model('Reserva', ReservaSchema)
