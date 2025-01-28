@@ -1,26 +1,29 @@
+
+const mongoose = require('mongoose')
+
 const UserSchema = new mongoose.Schema({
-    nombre: {
+  nombre: {
     required: true,
-    type: String,
-    },
-    email: {
+    type: String
+  },
+  email: {
     required: true,
-    type: String,
-    },
-    username: {
+    type: String
+  },
+  username: {
     required: true,
-    type: String,
-    },
-    password: {
+    type: String
+  },
+  password: {
     required: true,
+    type: String
+  },
+  role: {
     type: String,
-    },
-    role: {
-    type: String,
-    enum: ["admin", "usuario","trabajador"], // Roles permitidos
-    default: "usuario", // Rol por defecto
-    },
-    avatar: {
-    type: String,
-    },
-    });
+    enum: ['admin', 'usuario', 'trabajador'], // Roles permitidos
+    default: 'usuario' // Rol por defecto
+  },
+  avatar: {
+    type: String
+  }
+})

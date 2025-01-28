@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const mongoString = process.env.DATABASE_URL
 const mongoStringLocal = process.env.DATABASE_URL_LOCAL
 
-const router = require('./routes/routes.js')
+const routerBooking = require('./routes/booking_routes/booking_roter.js')
 const authRoutes = require('./routes/auth');
 
 
@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 //directamente de un formulario, sino que sera todo enviado en json
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.use("/user",router);
+app.use("/user",routerBooking);
 //practica de psp
 app.use('/api/user', authRoutes);
 

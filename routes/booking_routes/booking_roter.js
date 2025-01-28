@@ -1,5 +1,5 @@
-const ModelBooking = require('../models/booking_model.js');
-
+const ModelBooking = require('../../models/booking_model.js');
+const router = require('express').Router()
 
 router.get('getBookings',(req,res) =>{
     try {
@@ -19,3 +19,5 @@ router.get('/getFreeRooms', async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
+
+module.exports = router;
