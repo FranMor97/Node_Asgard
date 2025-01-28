@@ -1,4 +1,4 @@
-use(hotel);
+use(hotel); //hotel
 
 db.habitaciones.insertMany([
   {
