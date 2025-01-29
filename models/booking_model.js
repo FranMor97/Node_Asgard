@@ -14,4 +14,4 @@ const ReservaSchema = new Schema({
   precio: { type: Number, required: true }
 })
 
-module.exports = mongoose.model('Reserva', ReservaSchema)
+module.exports = mongoose.model('Reserva', ReservaSchema,'reservas')

@@ -12,10 +12,10 @@ const UsuarioSchema = new mongoose.Schema({
   fechaRegistro: { type: Date, default: Date.now },
   tipo: {
     type: String,
-    enum: ['cliente', 'admin', , 'empleado'],
+    enum: ['cliente', 'admin', 'empleado'],
     default: 'cliente'
   },
   reservas: [{ type: Schema.Types.ObjectId, ref: 'Reserva' }]
 });
 
-module.exports = mongoose.model('Usuario', UsuarioSchema)
+module.exports = mongoose.model('Usuario', UsuarioSchema,'usuarios')

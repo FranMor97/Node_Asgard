@@ -38,7 +38,7 @@ app.use(bodyParser.json());
 //De esta manera indicamos que no vamos a recibir peticiones enviadas directamente de un formulario, sino que sera todo enviado en json
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.use("/user",routerBooking);
+app.use("/api/bookings",routerBooking);
 
 app.use('/api/user', authRoutes);
 
