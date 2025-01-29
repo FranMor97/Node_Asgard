@@ -10,7 +10,7 @@ const mongoStringLocal = process.env.DATABASE_URL_LOCAL
 
 const routerBooking = require('./routes/booking_routes/booking_roter.js')
 const authRoutes = require('./routes/auth.js');
-const roomRoutes = require("./routes/room_routes.js");
+const roomRoutes = require("./routes/room_routes/room_routes.js");
 
 
 

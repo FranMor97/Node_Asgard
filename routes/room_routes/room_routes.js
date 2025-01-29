@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Habitacion = require("../../models/Habitacion"); // Asegúrate de la ruta correcta a tu modelo
+const Habitacion = require("../../models/room_model"); // Asegúrate de la ruta correcta a tu modelo
 
 // Crear una nueva habitación (POST /api/rooms)
 router.post("/", async (req, res) => {
