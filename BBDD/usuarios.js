@@ -36,3 +36,4 @@ db.usuarios.isnsertMany([
     avatar: null // Sin avatar
   }
 ])
+
