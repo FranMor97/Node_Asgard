@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
 });
 
 // OBTENER todas las habitaciones (GET /api/rooms)
-router.get("/", async (req, res) => {
+router.get("/getRooms", async (req, res) => {
   try {
     const habitaciones = await Habitacion.find();
     res.json(habitaciones);
