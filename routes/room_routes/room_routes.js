@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Habitacion = require("../../models/room_model"); // Asegúrate de la ruta correcta a tu modelo
 
-// Crear una nueva habitación (POST /api/rooms)
+// CREAR una nueva habitación (POST /api/rooms)
 router.post("/", async (req, res) => {
   try {
     const nuevaHabitacion = new Habitacion(req.body);
@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Obtener todas las habitaciones (GET /api/rooms)
+// OBTENER todas las habitaciones (GET /api/rooms)
 router.get("/", async (req, res) => {
   try {
     const habitaciones = await Habitacion.find();
