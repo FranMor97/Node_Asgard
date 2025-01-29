@@ -34,16 +34,7 @@ db.habitaciones.insertMany([
     numPersonas: 6,
     precio: 1000,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/odin-suite-android1.jpg",
-        "https://example.com/odin-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/odin-suite-wpf1.jpg",
-        "https://example.com/odin-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -69,16 +60,7 @@ db.habitaciones.insertMany([
     numPersonas: 4,
     precio: 625,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -104,16 +86,7 @@ db.habitaciones.insertMany([
     numPersonas: 4,
     precio: 625,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -139,16 +112,7 @@ db.habitaciones.insertMany([
     numPersonas: 4,
     precio: 625,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -174,10 +138,7 @@ db.habitaciones.insertMany([
     numPersonas: 4,
     precio: 625,
     descripcion: "Lorem",
-    imagenes: [
-      { url: "https://example.com/balder-suite1.jpg", plataforma: "general" },
-      { url: "https://example.com/balder-suite2.jpg", plataforma: "general" },
-    ],
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -196,16 +157,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -224,16 +176,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -252,16 +195,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -280,16 +214,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -308,16 +233,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -336,16 +252,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -364,16 +271,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -392,16 +290,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -420,16 +309,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -448,16 +328,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
   {
@@ -476,16 +347,7 @@ db.habitaciones.insertMany([
     numPersonas: 2,
     precio: 125,
     descripcion: "Lorem",
-    imagenes: {
-      android: [
-        "https://example.com/thor-suite-android1.jpg",
-        "https://example.com/thor-suite-android2.jpg",
-      ],
-      wpf: [
-        "https://example.com/thor-suite-wpf1.jpg",
-        "https://example.com/thor-suite-wpf2.jpg",
-      ],
-    },
+    imagenes: ["https://"],
     habilitada: true,
   },
 ]);
