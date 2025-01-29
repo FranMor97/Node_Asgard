@@ -9,7 +9,10 @@ const mongoString = process.env.DATABASE_URL
 const mongoStringLocal = process.env.DATABASE_URL_LOCAL
 
 const routerBooking = require('./routes/booking_routes/booking_roter.js')
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth.js');
+const roomRoutes = require("./routes/room_routes.js");
+
+
 
 
 
@@ -32,6 +35,8 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use("/user",routerBooking);
 //practica de psp
 app.use('/api/user', authRoutes);
+
+app.use("/api/rooms", roomRoutes);
 
 app.listen(3000, () => {
 console.log(`Server Started at ${PORT}`)})
