@@ -20,4 +20,4 @@ const HabitacionSchema = new mongoose.Schema({
 });
 
 // Exportar el modelo
-module.exports = mongoose.model("Habitacion", HabitacionSchema);
+module.exports = mongoose.model("Habitacion", HabitacionSchema, 'habitaciones');

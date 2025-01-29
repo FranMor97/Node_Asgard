@@ -1,5 +1,5 @@
 //using hotel database
-use("hotel");
+use("asgard");
 
 //delete all rooms
 db.habitaciones.deleteMany({});

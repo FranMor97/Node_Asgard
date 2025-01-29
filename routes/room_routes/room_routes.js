@@ -17,6 +17,7 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const habitaciones = await Habitacion.find();
+    console.log("Habitaciones encontradas:", habitaciones);
     res.json(habitaciones);
   } catch (error) {
     res.status(500).json({ error: error.message });
