@@ -36,6 +36,23 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Obtener una habitación de cada categoria
+router.get("/unique", async (req, res) => {
+  try {
+      const habitaciones = await Habitacion.aggregate([
+          { $sort: { categoria: 1, _id: 1 } }, // Ordena por categoría y ID
+          { $group: { _id: "$categoria", habitacion: { $first: "$$ROOT" } } }, // Agrupa por categoría y toma la primera
+          { $replaceRoot: { newRoot: "$habitacion" } } // Extrae los datos de la habitación
+      ]);
+
+      res.json(habitaciones);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error al obtener habitaciones únicas" });
+  }
+});
+
+
 // Actualizar una habitación (PUT /api/rooms/:id)
 router.put("/:id", async (req, res) => {
   try {
