@@ -318,7 +318,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB011",
+    codigo: "HAB013",
     nombre: "Muninn",
     categoria: "Estándar Double",
     camas: [{ numCamas: 1, nombre: "Double" }],
@@ -336,7 +336,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB013",
+    codigo: "HAB014",
     nombre: "Geri",
     categoria: "Estándar Double",
     camas: [{ numCamas: 1, nombre: "Double" }],
@@ -354,7 +354,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB014",
+    codigo: "HAB015",
     nombre: "Rafn",
     categoria: "Estándar Double",
     camas: [{ numCamas: 1, nombre: "Double" }],
@@ -372,7 +372,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB015",
+    codigo: "HAB016",
     nombre: "Valravn",
     categoria: "Estándar Double",
     camas: [{ numCamas: 1, nombre: "Double" }],
@@ -390,7 +390,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB016",
+    codigo: "HAB017",
     nombre: "Sköll",
     categoria: "Estándar Twin",
     camas: [{ numCamas: 2, nombre: "Twin" }],
@@ -408,7 +408,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB017",
+    codigo: "HAB018",
     nombre: "Dellingr",
     categoria: "Estándar Twin",
     camas: [{ numCamas: 2, nombre: "Twin" }],
@@ -426,7 +426,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB018",
+    codigo: "HAB019",
     nombre: "Svanr",
     categoria: "Estándar Twin",
     camas: [{ numCamas: 2, nombre: "Twin" }],
@@ -444,7 +444,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB019",
+    codigo: "HAB020",
     nombre: "Gjallar",
     categoria: "Estándar Twin",
     camas: [{ numCamas: 2, nombre: "Twin" }],
@@ -462,7 +462,7 @@ db.habitaciones.insertMany([
     habilitada: true,
   },
   {
-    codigo: "HAB020",
+    codigo: "HAB021",
     nombre: "Arvakr",
     categoria: "Estándar Twin",
     camas: [{ numCamas: 2, nombre: "Twin" }],
