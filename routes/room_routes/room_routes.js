@@ -24,34 +24,46 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Obtener una habitación por ID (GET /api/rooms/:id)
-router.get("/:id", async (req, res) => {
+// Obtener una habitación de cada categoria (GET /api/rooms/unique)
+router.get("/unique", async (req, res) => {
   try {
-    const habitacion = await Habitacion.findById(req.params.id);
-    if (!habitacion)
+    const habitaciones = await Habitacion.aggregate([
+      {
+        $group: {
+          _id: "$categoria",
+          habitacion: { $first: "$$ROOT" }
+        }
+      },
+      { $sort: { "habitacion.precio": -1 } }, // order by price so rooms are shown in order
+      {
+        $project: {
+          _id: 0,            // Excluye el _id
+          habitacion: 1      // Incluye el objeto habitacion
+        }
+      }
+    ]);
+    
+    res.json(habitaciones);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener habitaciones únicas" });
+  }
+});
+
+// Obtener una habitación por ID (GET /api/rooms/:id)
+router.get("/:codigo", async (req, res) => {
+  try {
+    const habitacion = await Habitacion.findOne({ codigo: req.params.codigo });
+
+    if (!habitacion) {
       return res.status(404).json({ message: "Habitación no encontrada" });
+    }
+
     res.json(habitacion);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
-// Obtener una habitación de cada categoria
-router.get("/unique", async (req, res) => {
-  try {
-      const habitaciones = await Habitacion.aggregate([
-          { $sort: { categoria: 1, _id: 1 } }, // Ordena por categoría y ID
-          { $group: { _id: "$categoria", habitacion: { $first: "$$ROOT" } } }, // Agrupa por categoría y toma la primera
-          { $replaceRoot: { newRoot: "$habitacion" } } // Extrae los datos de la habitación
-      ]);
-
-      res.json(habitaciones);
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error al obtener habitaciones únicas" });
-  }
-});
-
 
 // Actualizar una habitación (PUT /api/rooms/:id)
 router.put("/:id", async (req, res) => {
