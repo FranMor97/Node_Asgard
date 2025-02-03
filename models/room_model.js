@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const HabitacionSchema = new mongoose.Schema({
+  _id: { type: String, required: true },
   codigo: { type: String, required: true, unique: true }, // Usamos String para permitir códigos alfanuméricos
   nombre: { type: String, required: true },
   categoria: { type: String, required: true },
