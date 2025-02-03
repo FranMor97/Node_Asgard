@@ -50,7 +50,7 @@ router.get("/unique", async (req, res) => {
   }
 });
 
-// Obtener una habitación por ID (GET /api/rooms/:id)
+// Obtener una habitación por ID (GET /api/rooms/:codigo)
 router.get("/:codigo", async (req, res) => {
   try {
     const habitacion = await Habitacion.findOne({ codigo: req.params.codigo });
