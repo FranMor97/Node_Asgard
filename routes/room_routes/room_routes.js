@@ -27,7 +27,7 @@ router.post("/", upload.array("imagenes", 5), async (req, res) => {
       habilitada,
     } = req.body;
 
-    // Convertir `camas` y `servicios` si vienen como strings JSON
+    // Convertir `camas` y `servicios` si vienen como strings JSON 
     const camas = req.body.camas ? JSON.parse(req.body.camas) : [];
     const servicios = req.body.servicios ? JSON.parse(req.body.servicios) : [];
 
