@@ -12,6 +12,10 @@ router.get('/getBookings', async (req, res) => { // 🔹 Faltaba el `/` en la ru
   }
 });
 
+
+router.post('/createRooms',)
+
+
 router.post('/getFreeRooms', async (req, res) => {
   try {
     const FFR = new Date('2023-03-03'); // Fecha de inicio
