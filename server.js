@@ -3,10 +3,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
+const multer = require("multer");
+const cors = require("cors");
 
 const PORT = process.env.PORT || 3000;
 const mongoString = process.env.DATABASE_URL
-const mongoStringLocal = process.env.DATABASE_URL_LOCAL
+//const mongoStringLocal = process.env.DATABASE_URL_LOCAL
 
 // IMPORTING ROUTES
 const routerBooking = require('./routes/booking_routes/booking_roter.js')
@@ -30,18 +32,30 @@ const app = express();
 
 
 // MIDDLEWARE
-//app.use(express.json());
-
 //Nos permite manejar peticiones y enviar respuesta en formato json
 app.use(bodyParser.json());
-
 //De esta manera indicamos que no vamos a recibir peticiones enviadas directamente de un formulario, sino que sera todo enviado en json
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors());
+
+
+// Servir imágenes desde la carpeta `/uploads`
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Configurar `multer` para manejar la subida de imágenes
+const storage = multer.diskStorage({
+    destination: "./uploads/",
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Nombre único para evitar conflictos
+    }
+});
+const upload = multer({ storage });
 
 app.use("/api/bookings",routerBooking);
 
 app.use('/api/user', authRoutes);
 
+// PASAR `upload` COMO MIDDLEWARE A LAS RUTAS
 app.use("/api/rooms", roomRoutes);
 
 app.listen(3000, () => {
