@@ -61,7 +61,7 @@ router.post('/getFreeRooms', async (req, res) => {
     console.log(reservasOcupadas.length)
 
     const habitacionesOcupadasIds = reservasOcupadas?.map(r => r.habitacion)
-
+     
     // 2️⃣ Buscar habitaciones que NO están reservadas en ese rango, están habilitadas y tienen capacidad suficiente
     const habitacionesLibres = await Habitacion.find({
       _id: { $nin: habitacionesOcupadasIds }, // Excluir habitaciones ocupadas
