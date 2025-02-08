@@ -15,7 +15,7 @@ const UsuarioSchema = new mongoose.Schema({
     enum: ['cliente', 'admin', 'empleado'],
     default: 'cliente'
   },
-  reservas: [{ type: Schema.Types.ObjectId, ref: 'Reserva' }]
+  reservas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reserva' }]
 });
 
 module.exports = mongoose.model('Usuario', UsuarioSchema,'usuarios')
