@@ -6,6 +6,7 @@ const Joi = require('joi')
 const bcrypt = require('bcryptjs')
 
 const jwt = require('jsonwebtoken')
+const user_model = require('../models/user_model')
 
 const schemaRegister = Joi.object({
   nombre: Joi.string().min(6).max(255).required(),
@@ -22,6 +23,16 @@ const schemaLogin = Joi.object({
   role: Joi.string().valid('admin', 'usuario').default('usuario')
 })
 
+router.get('/getAll', async (req, res) => {
+  try{
+  const data = await user_model.find();
+  res.status(200).json(data);
+  } 
+  catch(error){
+  res.status(500).json({message: error.message});
+  }
+});
+
 router.post('/register', async (req, res) => {
   // validate user
   const { error } = schemaRegister.validate(req.body)
@@ -29,14 +40,14 @@ router.post('/register', async (req, res) => {
     return res.status(400).json({ error: error.details[0].message })
   }
   //valida Email unico
-  const isEmailExist = await ModelUser.findOne({ email: req.body.email })
+  const isEmailExist = await user_model.findOne({ email: req.body.email })
   if (isEmailExist) {
     return res.status(400).json({ error: 'Email ya registrado' })
   }
   // hash contraseña
   const salt = await bcrypt.genSalt(10)
   const password = await bcrypt.hash(req.body.password, salt)
-  const user = new ModelUser({
+  const user = new user_model({
     nombre: req.body.nombre,
     email: req.body.email,
     username: req.body.username,
@@ -59,7 +70,7 @@ router.post('/login', async (req, res) => {
   // validaciones
   const { error } = schemaLogin.validate(req.body)
   if (error) return res.status(400).json({ error: error.details[0].message })
-  const user = await ModelUser.findOne({ email: req.body.email })
+  const user = await user_model.findOne({ email: req.body.email })
   if (!user) return res.status(400).json({ error: 'Usuario no encontrado' })
   const validPassword = await bcrypt.compare(req.body.password, user.password)
   if (!validPassword)
