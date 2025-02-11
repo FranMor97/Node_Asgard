@@ -69,6 +69,35 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Obtener categorías. (GET /api/rooms/categories)
+router.get('/categories', async (req, res) => {
+  try {
+    const categorias = await Habitacion.aggregate([
+      {
+        $group: {
+          _id: "$categoria",                 // Agrupamos por el campo "categoria"
+          precio: { $first: "$precio" },       // Tomamos el primer valor de "precio" del grupo
+          numPersonas: { $first: "$numPersonas" }, // Tomamos el primer valor de "numPersonas" (capacidad)
+          camas: { $first: "$camas" }          // Tomamos el primer array de "camas"
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          categoria: "$_id",                   // Renombramos _id a "categoria"
+          precio: 1,
+          numPersonas: 1,
+          numCamas: { $size: "$camas" }          // Calculamos la cantidad de camas contando los elementos del array "camas"
+        }
+      }
+    ]);
+    res.json(categorias);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 // Obtener una habitación de cada categoria (GET /api/rooms/unique)
 router.get("/unique", async (req, res) => {
   try {
@@ -168,18 +197,32 @@ router.put("/:codigo", upload.array("imagenes", 5), async (req, res) => {
 });
 
 // TODO()
-// Eliminar una habitación (DELETE /api/rooms/:codigo)
-router.delete("/:codigo", async (req, res) => {
+// Alternar el estado de habilitación de una habitación (PUT /api/rooms/:codigo/toggle)
+router.put("/:codigo/toggle", async (req, res) => {
   try {
-    const habitacionEliminada = await Habitacion.findOneAndDelete(
-      req.params.codigo
-    );
-    if (!habitacionEliminada)
+    // Buscar la habitación por código
+    const habitacion = await Habitacion.findOne({ codigo: req.params.codigo });
+
+    if (!habitacion) {
       return res.status(404).json({ message: "Habitación no encontrada" });
-    res.json({ message: "Habitación eliminada correctamente" });
+    }
+
+    // Cambiar el estado de habilitación
+    habitacion.habilitada = !habitacion.habilitada;
+    
+    // Guardar la actualización en la base de datos
+    await habitacion.save();
+
+    res.json({
+      message: `Habitación ${habitacion.habilitada ? "habilitada" : "deshabilitada"} correctamente`,
+      habitacion,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
 
 module.exports = router;
