@@ -75,27 +75,33 @@ router.get('/categories', async (req, res) => {
     const categorias = await Habitacion.aggregate([
       {
         $group: {
-          _id: "$categoria",                 // Agrupamos por el campo "categoria"
-          precio: { $first: "$precio" },       // Tomamos el primer valor de "precio" del grupo
-          numPersonas: { $first: "$numPersonas" }, // Tomamos el primer valor de "numPersonas" (capacidad)
-          camas: { $first: "$camas" }          // Tomamos el primer array de "camas"
+          _id: "$categoria",                  // Agrupamos por el campo "categoria"
+          precio: { $first: "$precio" },      // Tomamos el primer precio del grupo
+          numPersonas: { $first: "$numPersonas" },  // Tomamos el primer valor de capacidad
+          camas: { $first: "$camas" }         // Tomamos el primer array de camas completo
         }
       },
       {
         $project: {
-          _id: 0,
-          categoria: "$_id",                   // Renombramos _id a "categoria"
-          precio: 1,
-          numPersonas: 1,
-          numCamas: { $size: "$camas" }          // Calculamos la cantidad de camas contando los elementos del array "camas"
+          _id: 1,                            // Mantenemos el _id (que representa la categoría)
+          precio: 1,                          // Incluimos el precio
+          numPersonas: 1,                     // Incluimos la capacidad (número de huéspedes)
+          camas: 1                            // Devolvemos el array completo de camas
         }
+      },
+      {
+        $sort: { precio: -1 }                  // Ordenar por precio ascendente (de menor a mayor)
       }
     ]);
+    
     res.json(categorias);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
 
 
 // Obtener una habitación de cada categoria (GET /api/rooms/unique)
