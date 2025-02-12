@@ -18,13 +18,19 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const schemaRegister = Joi.object({
-  nombre: Joi.string().min(6).max(255).required(),
-  email: Joi.string().min(6).max(255).required().email(),
-  username: Joi.string().min(3).max(40).required(),
+  nombre: Joi.string().min(3).max(255).required(),
+  apellido1: Joi.string().min(3).max(255).required(),
+  apellido2: Joi.string().min(3).max(255).optional().allow(''), // opcional
+  email: Joi.string().email().min(6).max(255).required(),
+  dniPasaporte: Joi.string().min(6).max(20).required(),
+  movil: Joi.string().min(9).max(15).required(),
   password: Joi.string().min(6).max(1024).required(),
-  role: Joi.string().valid('admin', 'usuario').default('usuario'),
-  avatar: Joi.string()
-})
+  fechaNacimiento: Joi.date().required(),
+  fechaRegistro: Joi.date().default(() => new Date(), 'Fecha de registro actual'),
+  tipo: Joi.string().valid('admin', 'usuario').default('usuario'),
+  reservas: Joi.array().items(Joi.object()).default([]),
+  avatar: Joi.string().uri().optional().allow('')
+});
 
 const schemaLogin = Joi.object({
   email: Joi.string().min(6).max(255).required().email(),
@@ -47,12 +53,18 @@ router.post('/register', async (req, res) => {
   // hash contraseña
   const salt = await bcrypt.genSalt(10)
   const password = await bcrypt.hash(req.body.password, salt)
-  const user = new ModelUser({
+  const user = new user_model({
     nombre: req.body.nombre,
     email: req.body.email,
-    username: req.body.username,
+    apellido1: req.body.apellido1,
+    apellido2: req.body.apellido2,
+    dniPasaporte: req.body.dniPasaporte,
+    movil: req.body.movil,
     password: password,
-    role: req.body.role,
+    fechaNacimiento: req.body.fechaNacimiento,
+    fechaRegistro: req.body.fechaRegistro,
+    tipo: req.body.tipo,
+    reservas: req.body.reservas,
     avatar: req.body.avatar
   })
   try {
@@ -122,8 +134,8 @@ router.get('/getFilter', async (req, res) => {
   const condiciones = {};
   if (req.body.nombre) condiciones.nombre = req.body.nombre;
   if (req.body.email) condiciones.email = req.body.email;
-  if (req.body.username) condiciones.username = req.body.username;
-  if (req.body.password) condiciones.password = req.body.password;
+  if (req.body.dniPasaporte) condiciones.dniPasaporte = req.body.dniPasaporte;
+  if (req.body.movil) condiciones.movil = req.body.movil;
   const data = await user_model.find(condiciones);
   if (data.length === 0) {
   return res.status(404).json({ message: 'Documento no encontrado' });
@@ -192,10 +204,10 @@ router.patch('/update', async (req, res) => {
 
 router.delete('/delete', async (req, res) => {
   try {
-  const user = req.body.username;
-  const data = await user_model.deleteOne({ username: user })
+  const user = req.body.email;
+  const data = await user_model.deleteOne({ email: user })
   if (data.deletedCount === 0) {
-  return res.status(404).json({ message: 'Documento no encontrado' });
+  return res.status(404).json({ message: 'Email no encontrado' });
   }
   //res.send(`Document with ${data.usuario} has been deleted..`)
   res.status(200).json({ message: `Document with ${user} has been
