@@ -29,7 +29,7 @@ const schemaRegister = Joi.object({
   password: Joi.string().min(6).max(1024).required(),
   fechaNacimiento: Joi.date().required(),
   fechaRegistro: Joi.date().default(() => new Date()),
-  tipo: Joi.string().valid('admin', 'usuario').default('usuario'),
+  tipo: Joi.string().valid('admin', 'usuario', 'cliente').default('usuario'),
   reservas: Joi.array().items(Joi.object()).default([]),
   avatar: Joi.string().uri().optional().allow('')
 });
@@ -52,6 +52,7 @@ router.post('/register', async (req, res) => {
   if (isEmailExist) {
     return res.status(400).json({ error: 'Email ya registrado' })
   }
+
   // hash contraseña
   const salt = await bcrypt.genSalt(10)
   const password = await bcrypt.hash(req.body.password, salt)
@@ -89,6 +90,10 @@ router.post('/login', async (req, res) => {
   const validPassword = await bcrypt.compare(req.body.password, user.password)
   if (!validPassword)
     return res.status(400).json({ error: 'contraseña no válida' })
+
+  if (user.tipo !== 'admin') {
+    return res.status(403).json({ error: 'Acceso denegado. Solo los administradores pueden iniciar sesión.' });
+  }
   // create token
   const token = jwt.sign(
     {
