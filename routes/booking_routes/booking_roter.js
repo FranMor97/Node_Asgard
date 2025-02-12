@@ -3,6 +3,7 @@ const Reserva = require('../../models/booking_model.js')
 const Habitacion = require('../../models/room_model.js')
 const Usuario = require('../../models/user_model.js')
 const BD_RESERVAS = require('../../BBDD/bookings.js')
+const mongoose = require("mongoose");
 
 const router = require('express').Router()
 
@@ -257,6 +258,55 @@ router.post('/searchBookings', async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
+
+
+router.post('/createBooking', async (req, res) => {
+  try {
+    const { codigo, habitacion, usuario, precio } = req.body;
+    let{fechaInicio,fechaFin} = req.body;
+
+    // 🔹 Validar que todos los datos estén presentes
+    if (!codigo || !fechaInicio || !fechaFin || !habitacion || !usuario || !precio) {
+      return res.status(400).json(false); 
+    }
+    fechaInicio = convertirFecha(fechaInicio)
+    fechaFin = convertirFecha(fechaFin)
+
+    let nuevoCodigo = codigo;
+
+    // 🔹 Si el código es "RES000", generamos un nuevo código secuencial
+    if (codigo === "RES000") {
+      const ultimaReserva = await Reserva.findOne().sort({ codigo: -1 });
+
+      if (ultimaReserva && ultimaReserva.codigo.startsWith("RES")) {
+        const numeroCodigo = parseInt(ultimaReserva.codigo.replace("RES", ""), 10);
+        nuevoCodigo = `RES${String(numeroCodigo + 1).padStart(3, '0')}`;
+      } else {
+        nuevoCodigo = "RES001"; // Si no hay reservas previas, iniciamos con RES001
+      }
+    }
+
+    // 🔹 Crear la nueva reserva
+    const nuevaReserva = new Reserva({
+      codigo: nuevoCodigo,
+      fechaInicio: new Date(fechaInicio),
+      fechaFin: new Date(fechaFin),
+      habitacion: new mongoose.Types.ObjectId(habitacion),
+      usuario: new mongoose.Types.ObjectId(usuario),
+      precio
+    });
+
+    await nuevaReserva.save();
+
+    return res.status(201).json(true); // ✅ Devuelve true si la reserva se creó exitosamente
+  } catch (error) {
+    console.error('Error al crear la reserva:', error);
+    return res.status(500).json(false); // ⛔ Devuelve false en caso de error
+  }
+});
+
+
+
 
 
 module.exports = router
