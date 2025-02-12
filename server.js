@@ -14,6 +14,7 @@ const mongoString = process.env.DATABASE_URL
 const routerBooking = require('./routes/booking_routes/booking_roter.js')
 const authRoutes = require('./routes/auth.js');
 const roomRoutes = require("./routes/room_routes/room_routes.js");
+const userRoutes = require("./routes/user_routes/user_routes.js")
 
 
 // MONGO CONNECTION
@@ -50,6 +51,8 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage });
+
+app.use("/api/users", userRoutes);
 
 app.use("/api/bookings",routerBooking);
 
