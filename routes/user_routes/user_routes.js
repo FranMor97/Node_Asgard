@@ -5,6 +5,8 @@ const multer = require("multer");
 const path = require("path");
 const user_model = require("../../models/user_model");
 
+const jwt = require('jsonwebtoken')
+
 const Joi = require('joi')
 //contraseña
 const bcrypt = require('bcryptjs')
@@ -26,7 +28,7 @@ const schemaRegister = Joi.object({
   movil: Joi.string().min(9).max(15).required(),
   password: Joi.string().min(6).max(1024).required(),
   fechaNacimiento: Joi.date().required(),
-  fechaRegistro: Joi.date().default(() => new Date(), 'Fecha de registro actual'),
+  fechaRegistro: Joi.date().default(() => new Date()),
   tipo: Joi.string().valid('admin', 'usuario').default('usuario'),
   reservas: Joi.array().items(Joi.object()).default([]),
   avatar: Joi.string().uri().optional().allow('')
