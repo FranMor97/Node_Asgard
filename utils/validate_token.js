@@ -16,7 +16,7 @@ return res.status(401).json({ error: 'Token revoked' });
 if (!token) return res.status(401).json({ error: 'Acceso denegado' })
 try {
     // Verificamos el token usando la dependencia de jwt y el método .verify
-    const verified = jwt.verify(token, process.env.TOKEN_SECRET)
+    const verified = jwt.verify(token, process.env.TOKEN_SECRETO)
     next() // continuamos
 } catch (error) {
     if (error.name === 'TokenExpiredError') {

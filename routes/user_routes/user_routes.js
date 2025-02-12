@@ -96,7 +96,7 @@ router.post('/login', async (req, res) => {
       role: user.role,
       id: user._id
     },
-    process.env.TOKEN_SECRET,
+    process.env.TOKEN_SECRETO,
     { expiresIn: process.env.JWT_EXPIRES }
   )
   res.header('auth-token', token).json({

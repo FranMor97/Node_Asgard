@@ -59,11 +59,8 @@ router.post('/getFreeRooms', async (req, res) => {
         .status(400)
         .json({ error: 'La fecha de inicio debe ser antes de la fecha de fin' })
     }
-    const habitaciones = Habitacion.find({})
-    console.log((await habitaciones).length)
 
-    console.log(fechaInicio)
-    console.log(fechaFin)
+  
 
     // 1️⃣ Buscar habitaciones ocupadas en el rango de fechas
     const reservasOcupadas = await Reserva.find({
