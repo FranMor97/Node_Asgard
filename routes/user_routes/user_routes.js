@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
   if (!validPassword)
     return res.status(400).json({ error: 'contraseña no válida' })
 
-  if (user.tipo !== 'admin') {
+  if (user.tipo !== 'admin'|| user.tipo !== 'empleado') {
     return res.status(403).json({ error: 'Acceso denegado. Solo los administradores pueden iniciar sesión.' });
   }
   // create token
