@@ -28,7 +28,7 @@ router.post("/", upload.array("imagenes", 5), async (req, res) => {
       habilitada,
     } = req.body;
 
-    // Convertir `camas` y `servicios` si vienen como strings JSON 
+    // Convertir `camas` y `servicios` si vienen como strings JSON
     const camas = req.body.camas ? JSON.parse(req.body.camas) : [];
     const servicios = req.body.servicios ? JSON.parse(req.body.servicios) : [];
 
@@ -59,6 +59,27 @@ router.post("/", upload.array("imagenes", 5), async (req, res) => {
   }
 });
 
+// Obtener el siguiente código de habitación (GET /api/rooms/newCode)
+router.get("/newCode", async (req, res) => {
+  try {
+    const ultimaHabitacion = await Habitacion.findOne().sort({ codigo: -1 }); // Obtener la última habitación según código
+    let nuevoCodigo = "HAB001"; // Código por defecto
+
+    if (ultimaHabitacion) {
+      const numeroActual = parseInt(
+        ultimaHabitacion.codigo.replace("HAB", ""),
+        10
+      );
+      const nuevoNumero = (numeroActual + 1).toString().padStart(3, "0");
+      nuevoCodigo = `HAB${nuevoNumero}`;
+    }
+
+    res.json({ codigo: nuevoCodigo });
+  } catch (error) {
+    res.status(500).json({ error: "Error al generar el código" });
+  }
+});
+
 // OBTENER todas las habitaciones (GET /api/rooms)
 router.get("/", async (req, res) => {
   try {
@@ -70,39 +91,39 @@ router.get("/", async (req, res) => {
 });
 
 // Obtener categorías. (GET /api/rooms/categories)
-router.get('/categories', async (req, res) => {
+router.get("/categories", async (req, res) => {
   try {
     const categorias = await Habitacion.aggregate([
       {
         $group: {
-          _id: "$categoria",                  // Agrupamos por el campo "categoria"
-          precio: { $first: "$precio" },      // Tomamos el primer precio del grupo
-          numPersonas: { $first: "$numPersonas" },  // Tomamos el primer valor de capacidad
-          camas: { $first: "$camas" }         // Tomamos el primer array de camas completo
-        }
+          _id: "$categoria", // Agrupamos por el campo "categoria"
+          precio: { $first: "$precio" }, // Tomamos el primer precio del grupo
+          numPersonas: { $first: "$numPersonas" }, // Tomamos el primer valor de capacidad
+          camas: { $first: "$camas" }, // Tomamos el primer array de camas completo
+          tamanyo: { $first: "$tamanyo" },
+          servicios: { $first: "$servicios" },
+        },
       },
       {
         $project: {
-          _id: 1,                            // Mantenemos el _id (que representa la categoría)
-          precio: 1,                          // Incluimos el precio
-          numPersonas: 1,                     // Incluimos la capacidad (número de huéspedes)
-          camas: 1                            // Devolvemos el array completo de camas
-        }
+          _id: 1, // Mantenemos el _id (que representa la categoría)
+          precio: 1, // Incluimos el precio
+          numPersonas: 1, // Incluimos la capacidad (número de huéspedes)
+          camas: 1, // Devolvemos el array completo de camas
+          tamanyo: 1,
+          servicios: 1,
+        },
       },
       {
-        $sort: { precio: -1 }                  // Ordenar por precio ascendente (de menor a mayor)
-      }
+        $sort: { precio: -1 }, // Ordenar por precio ascendente (de menor a mayor)
+      },
     ]);
-    
+
     res.json(categorias);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
-
-
-
 
 // Obtener una habitación de cada categoria (GET /api/rooms/unique)
 router.get("/unique", async (req, res) => {
@@ -125,6 +146,63 @@ router.get("/unique", async (req, res) => {
     res.json(habitaciones);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener habitaciones únicas" });
+  }
+});
+
+// Obtener las habitaciones que concuerdan con los filtros (GET /api/rooms/filter)
+router.get("/filter", async (req, res) => {
+  try {
+
+    let query = {};
+
+    // 🔹 Asegurarse de que las claves coincidan con MongoDB (minúsculas)
+    if (req.query.codigo) {
+      query.codigo = { $regex: new RegExp(req.query.codigo, "i") };
+    }
+
+    if (req.query.nombre) {
+      query.nombre = { $regex: new RegExp(req.query.nombre, "i") };
+    }
+
+    if (req.query.categoria) {
+      query.categoria = req.query.categoria; // 🔹 Usar la clave correcta
+    }
+
+    if (req.query.numPersonasMax) {
+      query.numPersonas = { $lte: parseInt(req.query.numPersonasMax) }; // 🔹 Ahora filtra por máximo huéspedes
+    }
+
+    if (req.query.tamanyoMin || req.query.tamanyoMax) {
+      query.tamanyo = {}; // 🔹 minúscula
+      if (req.query.tamanyoMin)
+        query.tamanyo.$gte = parseInt(req.query.tamanyoMin);
+      if (req.query.tamanyoMax)
+        query.tamanyo.$lte = parseInt(req.query.tamanyoMax);
+    }
+
+    if (req.query.precioMin || req.query.precioMax) {
+      query.precio = {}; // 🔹 minúscula
+      if (req.query.precioMin)
+        query.precio.$gte = parseFloat(req.query.precioMin);
+      if (req.query.precioMax)
+        query.precio.$lte = parseFloat(req.query.precioMax);
+    }
+
+    if (req.query.habilitada !== undefined) {
+      query.habilitada = req.query.habilitada === "true"; // 🔹 minúscula
+    }
+
+
+    const rooms = await Habitacion.find(query);
+    res.json(rooms);
+  } catch (error) {
+    console.error("Error en el filtro:", error);
+    res
+      .status(500)
+      .json({
+        message: "Error al filtrar habitaciones",
+        error: error.toString(),
+      });
   }
 });
 
@@ -171,13 +249,11 @@ router.put("/:codigo", upload.array("imagenes", 5), async (req, res) => {
       ? req.files.map((file) => `/uploads/${file.filename}`)
       : [];
 
-  
     /* Reemplazar completamente el array de imágenes
     if (nuevasImagenes.length > 0) {
       habitacion.imagenes = nuevasImagenes;
     }
     */
-
 
     // Mantener las imágenes anteriores y agregar las nuevas
     habitacion.imagenes = [...habitacion.imagenes, ...nuevasImagenes];
@@ -215,20 +291,19 @@ router.put("/:codigo/toggle", async (req, res) => {
 
     // Cambiar el estado de habilitación
     habitacion.habilitada = !habitacion.habilitada;
-    
+
     // Guardar la actualización en la base de datos
     await habitacion.save();
 
     res.json({
-      message: `Habitación ${habitacion.habilitada ? "habilitada" : "deshabilitada"} correctamente`,
+      message: `Habitación ${
+        habitacion.habilitada ? "habilitada" : "deshabilitada"
+      } correctamente`,
       habitacion,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
-
-
 
 module.exports = router;
