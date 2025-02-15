@@ -224,52 +224,35 @@ router.get("/:codigo", async (req, res) => {
 // ACTUALIZAR una habitación con imágenes opcionales (PUT /api/rooms/:codigo)
 router.put("/:codigo", upload.array("imagenes", 5), async (req, res) => {
   try {
-    const {
-      codigo,
-      nombre,
-      categoria,
-      tamanyo,
-      numPersonas,
-      precio,
-      descripcion,
-      habilitada,
-    } = req.body;
+    const { nombre, categoria, tamanyo, numPersonas, precio, descripcion, habilitada, imagenes } = req.body;
 
-    // Convertir `camas` y `servicios` a arrays si son JSON strings
     const camas = req.body.camas ? JSON.parse(req.body.camas) : [];
     const servicios = req.body.servicios ? JSON.parse(req.body.servicios) : [];
 
-    // Buscar la habitación por `codigo`, no por `_id`
     const habitacion = await Habitacion.findOne({ codigo: req.params.codigo });
     if (!habitacion)
       return res.status(404).json({ message: "Habitación no encontrada" });
 
-    // Obtener nuevas imágenes subidas
-    const nuevasImagenes = req.files
-      ? req.files.map((file) => `/uploads/${file.filename}`)
-      : [];
+    // 🔹 Obtener nuevas imágenes subidas
+    const nuevasImagenes = req.files ? req.files.map((file) => `/uploads/${file.filename}`) : [];
 
-    /* Reemplazar completamente el array de imágenes
-    if (nuevasImagenes.length > 0) {
-      habitacion.imagenes = nuevasImagenes;
-    }
-    */
+    // 🔹 Si hay imágenes nuevas, mantener las anteriores y agregar las nuevas
+    let imagenesFinales = JSON.parse(imagenes || "[]"); // Convertir el JSON recibido
+    imagenesFinales = imagenesFinales.concat(nuevasImagenes);
 
-    // Mantener las imágenes anteriores y agregar las nuevas
-    habitacion.imagenes = [...habitacion.imagenes, ...nuevasImagenes];
+    // 🔹 Eliminar imágenes duplicadas
+    habitacion.imagenes = Array.from(new Set(imagenesFinales));
 
-    // Actualizar solo los campos proporcionados
-    habitacion.codigo = codigo || habitacion.codigo;
+    // 🔹 Actualizar solo los campos proporcionados
     habitacion.nombre = nombre || habitacion.nombre;
     habitacion.categoria = categoria || habitacion.categoria;
     habitacion.camas = camas.length ? camas : habitacion.camas;
-    habitacion.tamanyo = tamanyo || habitacion.tamanyo;
+    habitacion.tamanyo = tamanyo ? Number(tamanyo) : habitacion.tamanyo;
     habitacion.servicios = servicios.length ? servicios : habitacion.servicios;
-    habitacion.numPersonas = numPersonas || habitacion.numPersonas;
-    habitacion.precio = precio || habitacion.precio;
+    habitacion.numPersonas = numPersonas ? Number(numPersonas) : habitacion.numPersonas;
+    habitacion.precio = precio ? Number(precio) : habitacion.precio;
     habitacion.descripcion = descripcion || habitacion.descripcion;
-    habitacion.habilitada =
-      habilitada !== undefined ? habilitada : habitacion.habilitada;
+    habitacion.habilitada = habilitada !== undefined ? habilitada === "true" : habitacion.habilitada;
 
     const habitacionActualizada = await habitacion.save();
     res.json(habitacionActualizada);
@@ -278,7 +261,7 @@ router.put("/:codigo", upload.array("imagenes", 5), async (req, res) => {
   }
 });
 
-// TODO()
+
 // Alternar el estado de habilitación de una habitación (PUT /api/rooms/:codigo/toggle)
 router.put("/:codigo/toggle", async (req, res) => {
   try {
