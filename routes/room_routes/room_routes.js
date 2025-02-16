@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ✅ **CREAR una nueva habitación con múltiples imágenes (POST /api/rooms)**
+// **CREAR una nueva habitación con múltiples imágenes (POST /api/rooms)**
 router.post("/", upload.array("imagenes", 5), async (req, res) => {
   try {
     const {
@@ -206,7 +206,7 @@ router.get("/filter", async (req, res) => {
   }
 });
 
-// Obtener una habitación por ID (GET /api/rooms/:codigo)
+// Obtener una habitación por Codigo (GET /api/rooms/:codigo)
 router.get("/:codigo", async (req, res) => {
   try {
     const habitacion = await Habitacion.findOne({ codigo: req.params.codigo });
