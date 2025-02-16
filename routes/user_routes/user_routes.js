@@ -29,7 +29,7 @@ const schemaRegister = Joi.object({
   password: Joi.string().min(6).max(1024).required(),
   fechaNacimiento: Joi.date().required(),
   fechaRegistro: Joi.date().default(() => new Date()),
-  tipo: Joi.string().valid('admin', 'usuario', 'cliente').default('usuario'),
+  tipo: Joi.string().valid('admin', 'usuario', 'cliente').default('cliente'),
   reservas: Joi.array().items(Joi.object()).default([]),
   avatar: Joi.string().uri().optional().allow('')
 });
@@ -37,7 +37,7 @@ const schemaRegister = Joi.object({
 const schemaLogin = Joi.object({
   email: Joi.string().min(6).max(255).required().email(),
   password: Joi.string().min(6).max(1024).required(),
-  role: Joi.string().valid('admin', 'usuario').default('usuario')
+  role: Joi.string().valid('admin', 'usuario', 'cliente').default('cliente')
 })
 
 
@@ -81,6 +81,35 @@ router.post('/register', async (req, res) => {
   }
 })
 
+router.post('/logincorporate', async (req, res) => {
+  // validaciones
+  const { error } = schemaLogin.validate(req.body)
+  if (error) return res.status(400).json({ error: error.details[0].message })
+  const user = await user_model.findOne({ email: req.body.email })
+  if (!user) return res.status(400).json({ error: 'Usuario no encontrado' })
+  const validPassword = await bcrypt.compare(req.body.password, user.password)
+  if (!validPassword)
+    return res.status(400).json({ error: 'contraseña no válida' })
+
+  if (user.tipo !== 'admin') {
+    return res.status(403).json({ error: 'Acceso denegado. Solo los administradores pueden iniciar sesión.' });
+  }
+  // create token
+  const token = jwt.sign(
+    {
+      email: user.email,
+      role: user.role,
+      id: user._id
+    },
+    process.env.TOKEN_SECRETO,
+    { expiresIn: process.env.JWT_EXPIRES }
+  )
+  res.header('auth-token', token).json({
+    error: null,
+    data: { token }
+  })
+})
+
 router.post('/login', async (req, res) => {
   // validaciones
   const { error } = schemaLogin.validate(req.body)
@@ -91,9 +120,6 @@ router.post('/login', async (req, res) => {
   if (!validPassword)
     return res.status(400).json({ error: 'contraseña no válida' })
 
-  if (user.tipo !== 'admin'|| user.tipo !== 'empleado') {
-    return res.status(403).json({ error: 'Acceso denegado. Solo los administradores pueden iniciar sesión.' });
-  }
   // create token
   const token = jwt.sign(
     {
