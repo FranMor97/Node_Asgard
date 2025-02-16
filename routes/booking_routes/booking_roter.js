@@ -374,7 +374,39 @@ router.post('/createBookingWPF', async (req, res) => {
 });
 
 
+router.post('/GetUser',async (req,res)=> {
+  try{
+    const email = req.body.email;
+  if(!email){
+    return res.status(400).json({error:"Usuario no encontrado"});
+  }
+  const usuario =await Usuario.findOne({email})
+  return res.status(200).json(usuario)
+  }catch(error){
+    return res.status(500).json({error:"Error en la api"});
+  }
+});
 
+router.delete('/deleteBooking', async (req, res) => {
+  try {
+      const { codigo } = req.query; // Obtener el _id desde la query string
+
+      if (!codigo) {
+          return res.status(400).json({ message: 'El codigo de la reserva es requerido' });
+      }
+
+      const reservaEliminada = await Reserva.findOneAndDelete({codigo : codigo});
+
+      if (!reservaEliminada) {
+          return res.status(404).json({ message: 'Reserva no encontrada' });
+      }
+
+      res.status(200).json(true);
+  } catch (error) {
+      console.error('Error al eliminar la reserva:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
 
 
 

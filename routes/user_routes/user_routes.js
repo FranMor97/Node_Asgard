@@ -9,7 +9,8 @@ const jwt = require('jsonwebtoken')
 
 const Joi = require('joi')
 //contraseña
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const { log } = require("console");
 
 const storage = multer.diskStorage({
   destination: "./uploads/",
@@ -148,8 +149,11 @@ router.get('/getAll', async (req, res) => {
 
 router.post('/getOne', async (req, res) => {
   try{
-  const user = req.body.email;
-  const usuariosDB = await user_model.findOne({ email: user });
+  const email = req.body;
+  if (email){
+    console.log(email)
+  }
+  const usuariosDB = await user_model.findOne(email);
   console.log(usuariosDB);
   if (!usuariosDB) {
   return res.status(404).json({ message: 'Email no encontrado' });
