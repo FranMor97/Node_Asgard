@@ -146,7 +146,7 @@ router.get('/getAll', async (req, res) => {
   }
 });
 
-router.get('/getOne', async (req, res) => {
+router.post('/getOne', async (req, res) => {
   try{
   const user = req.body.email;
   const usuariosDB = await user_model.findOne({ email: user });
