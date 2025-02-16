@@ -23,6 +23,9 @@ router.get('/getBookings', async (req, res) => {
     return res.status(500).json({ message: error.message })
   }
 })
+
+
+//meter las reservas en la base de datos con el object id
 router.post('/insert',async (async,res) =>{
   const bool = await Reserva.insertMany(BD_RESERVAS)
   if(bool){
@@ -36,6 +39,17 @@ const convertirFecha = fechaStr => {
   return new Date(año, mes - 1, dia) // Mes en JS es 0-indexado
 }
 
+
+//Obtener los usuarios 
+router.get('/getUsers', async (req, res) => {
+  try {
+    const usuarios = await Usuario.find({tipo:'cliente'}); // Obtiene todos los usuarios de tipo cliente
+    res.status(200).json(usuarios); // Devuelve la lista en formato JSON
+  } catch (error) {
+    console.error('Error al obtener los usuarios:', error);
+    res.status(500).json({ message: 'Error al obtener los usuarios', error });
+  }
+});
 
 //llamadas a Android things
 router.post('/getFreeRooms', async (req, res) => {
@@ -292,15 +306,73 @@ router.post('/createBooking', async (req, res) => {
       usuario: new mongoose.Types.ObjectId(usuario),
       precio
     });
+    
+    response =  await   nuevaReserva.save();
 
-    await nuevaReserva.save();
+    await Usuario.findByIdAndUpdate(usuario, {
+      $push: { reservas: nuevaReserva._id }
+    });
 
-    return res.status(201).json(true); // ✅ Devuelve true si la reserva se creó exitosamente
+
+
+    return res.status(201).json(true); 
   } catch (error) {
     console.error('Error al crear la reserva:', error);
-    return res.status(500).json(false); // ⛔ Devuelve false en caso de error
+    return res.status(500).json(false); 
   }
 });
+
+router.post('/createBookingWPF', async (req, res) => {
+  try {
+    const { codigo, habitacion, usuario, precio, usuarioLogeado } = req.body;
+    let{fechaInicio,fechaFin} = req.body;
+
+    // 🔹 Validar que todos los datos estén presentes
+    if (!codigo || !fechaInicio || !fechaFin || !habitacion || !usuario || !precio || !usuarioLogeado) {
+      return res.status(400).json(false); 
+    }
+    fechaInicio = convertirFecha(fechaInicio)
+    fechaFin = convertirFecha(fechaFin)
+
+    let nuevoCodigo = codigo;
+
+    // 🔹 Si el código es "RES000", generamos un nuevo código secuencial
+    if (codigo === "RES000") {
+      const ultimaReserva = await Reserva.findOne().sort({ codigo: -1 });
+
+      if (ultimaReserva && ultimaReserva.codigo.startsWith("RES")) {
+        const numeroCodigo = parseInt(ultimaReserva.codigo.replace("RES", ""), 10);
+        nuevoCodigo = `RES${String(numeroCodigo + 1).padStart(3, '0')}`;
+      } else {
+        nuevoCodigo = "RES001"; // Si no hay reservas previas, iniciamos con RES001
+      }
+    }
+
+    // 🔹 Crear la nueva reserva
+    const nuevaReserva = new Reserva({
+      codigo: nuevoCodigo,
+      fechaInicio: new Date(fechaInicio),
+      fechaFin: new Date(fechaFin),
+      habitacion: new mongoose.Types.ObjectId(habitacion),
+      usuario: new mongoose.Types.ObjectId(usuarioLogeado),
+      precio
+    });
+    
+    response =  await   nuevaReserva.save();
+
+    await Usuario.findByIdAndUpdate(usuario, {
+      $push: { reservas: nuevaReserva._id }
+    });
+
+
+
+    return res.status(201).json(true); 
+  } catch (error) {
+    console.error('Error al crear la reserva:', error);
+    return res.status(500).json(false); 
+  }
+});
+
 
 
 
