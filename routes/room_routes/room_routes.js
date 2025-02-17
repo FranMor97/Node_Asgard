@@ -151,7 +151,6 @@ router.get("/unique", async (req, res) => {
 // Obtener las habitaciones que concuerdan con los filtros (GET /api/rooms/filter)
 router.get("/filter", async (req, res) => {
   try {
-
     let query = {};
 
     // 🔹 Asegurarse de que las claves coincidan con MongoDB (minúsculas)
@@ -164,15 +163,15 @@ router.get("/filter", async (req, res) => {
     }
 
     if (req.query.categoria) {
-      query.categoria = req.query.categoria; // 🔹 Usar la clave correcta
+      query.categoria = req.query.categoria;
     }
 
-    if (req.query.numPersonasMax) {
-      query.numPersonas = { $lte: parseInt(req.query.numPersonasMax) }; // 🔹 Ahora filtra por máximo huéspedes
+    if (req.query.numPersonas) {
+      query.numPersonas = { $lte: parseInt(req.query.numPersonas) }; // Ahora filtra por máximo huéspedes
     }
 
     if (req.query.tamanyoMin || req.query.tamanyoMax) {
-      query.tamanyo = {}; // 🔹 minúscula
+      query.tamanyo = {}; // minúscula
       if (req.query.tamanyoMin)
         query.tamanyo.$gte = parseInt(req.query.tamanyoMin);
       if (req.query.tamanyoMax)
@@ -180,7 +179,7 @@ router.get("/filter", async (req, res) => {
     }
 
     if (req.query.precioMin || req.query.precioMax) {
-      query.precio = {}; // 🔹 minúscula
+      query.precio = {}; // minúscula
       if (req.query.precioMin)
         query.precio.$gte = parseFloat(req.query.precioMin);
       if (req.query.precioMax)
@@ -188,20 +187,17 @@ router.get("/filter", async (req, res) => {
     }
 
     if (req.query.habilitada !== undefined) {
-      query.habilitada = req.query.habilitada === "true"; // 🔹 minúscula
+      query.habilitada = req.query.habilitada === "true"; // minúscula
     }
-
 
     const rooms = await Habitacion.find(query);
     res.json(rooms);
   } catch (error) {
     console.error("Error en el filtro:", error);
-    res
-      .status(500)
-      .json({
-        message: "Error al filtrar habitaciones",
-        error: error.toString(),
-      });
+    res.status(500).json({
+      message: "Error al filtrar habitaciones",
+      error: error.toString(),
+    });
   }
 });
 
@@ -223,7 +219,16 @@ router.get("/:codigo", async (req, res) => {
 // ACTUALIZAR una habitación con imágenes opcionales (PUT /api/rooms/:codigo)
 router.put("/:codigo", upload.array("imagenes", 5), async (req, res) => {
   try {
-    const { nombre, categoria, tamanyo, numPersonas, precio, descripcion, habilitada, imagenes } = req.body;
+    const {
+      nombre,
+      categoria,
+      tamanyo,
+      numPersonas,
+      precio,
+      descripcion,
+      habilitada,
+      imagenes,
+    } = req.body;
 
     const camas = req.body.camas ? JSON.parse(req.body.camas) : [];
     const servicios = req.body.servicios ? JSON.parse(req.body.servicios) : [];
@@ -232,26 +237,31 @@ router.put("/:codigo", upload.array("imagenes", 5), async (req, res) => {
     if (!habitacion)
       return res.status(404).json({ message: "Habitación no encontrada" });
 
-    // 🔹 Obtener nuevas imágenes subidas
-    const nuevasImagenes = req.files ? req.files.map((file) => `/uploads/${file.filename}`) : [];
+    // Obtener nuevas imágenes subidas
+    const nuevasImagenes = req.files
+      ? req.files.map((file) => `/uploads/${file.filename}`)
+      : [];
 
-    // 🔹 Si hay imágenes nuevas, mantener las anteriores y agregar las nuevas
+    // Si hay imágenes nuevas, mantener las anteriores y agregar las nuevas
     let imagenesFinales = JSON.parse(imagenes || "[]"); // Convertir el JSON recibido
     imagenesFinales = imagenesFinales.concat(nuevasImagenes);
 
-    // 🔹 Eliminar imágenes duplicadas
+    // Eliminar imágenes duplicadas
     habitacion.imagenes = Array.from(new Set(imagenesFinales));
 
-    // 🔹 Actualizar solo los campos proporcionados
+    // Actualizar solo los campos proporcionados
     habitacion.nombre = nombre || habitacion.nombre;
     habitacion.categoria = categoria || habitacion.categoria;
     habitacion.camas = camas.length ? camas : habitacion.camas;
     habitacion.tamanyo = tamanyo ? Number(tamanyo) : habitacion.tamanyo;
     habitacion.servicios = servicios.length ? servicios : habitacion.servicios;
-    habitacion.numPersonas = numPersonas ? Number(numPersonas) : habitacion.numPersonas;
+    habitacion.numPersonas = numPersonas
+      ? Number(numPersonas)
+      : habitacion.numPersonas;
     habitacion.precio = precio ? Number(precio) : habitacion.precio;
     habitacion.descripcion = descripcion || habitacion.descripcion;
-    habitacion.habilitada = habilitada !== undefined ? habilitada === "true" : habitacion.habilitada;
+    habitacion.habilitada =
+      habilitada !== undefined ? habilitada === "true" : habitacion.habilitada;
 
     const habitacionActualizada = await habitacion.save();
     res.json(habitacionActualizada);
@@ -259,7 +269,6 @@ router.put("/:codigo", upload.array("imagenes", 5), async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
-
 
 // Alternar el estado de habilitación de una habitación (PUT /api/rooms/:codigo/toggle)
 router.put("/:codigo/toggle", async (req, res) => {
