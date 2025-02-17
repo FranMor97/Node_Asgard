@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 const mongoString = process.env.DATABASE_URL
 //const mongoStringLocal = process.env.DATABASE_URL_LOCAL
 
+
 // IMPORTING ROUTES
 const routerBooking = require('./routes/booking_routes/booking_roter.js')
 const authRoutes = require('./routes/auth.js');
