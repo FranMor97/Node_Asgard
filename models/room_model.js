@@ -19,7 +19,7 @@ const HabitacionSchema = new mongoose.Schema({
   habilitada: { type: Boolean, required: true, default: true }, // Estado de disponibilidad
 });
 
-// 🔹 IMPORTANTE: Evitar que Mongoose agregue `_id` a cada cama
+// IMPORTANTE: Evitar que Mongoose agregue `_id` a cada cama al hacer el insert desde WPF
 HabitacionSchema.path("camas").schema.set("_id", false);
 
 // Exportar el modelo
