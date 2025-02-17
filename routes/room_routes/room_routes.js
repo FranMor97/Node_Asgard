@@ -153,7 +153,7 @@ router.get("/filter", async (req, res) => {
   try {
     let query = {};
 
-    // 🔹 Asegurarse de que las claves coincidan con MongoDB (minúsculas)
+    // Asegurarse de que las claves coincidan con MongoDB (minúsculas)
     if (req.query.codigo) {
       query.codigo = { $regex: new RegExp(req.query.codigo, "i") };
     }
@@ -167,11 +167,11 @@ router.get("/filter", async (req, res) => {
     }
 
     if (req.query.numPersonas) {
-      query.numPersonas = { $lte: parseInt(req.query.numPersonas) }; // Ahora filtra por máximo huéspedes
+      query.numPersonas = { $lte: parseInt(req.query.numPersonas) }; // filtra por máximo huéspedes
     }
 
     if (req.query.tamanyoMin || req.query.tamanyoMax) {
-      query.tamanyo = {}; // minúscula
+      query.tamanyo = {};
       if (req.query.tamanyoMin)
         query.tamanyo.$gte = parseInt(req.query.tamanyoMin);
       if (req.query.tamanyoMax)
@@ -179,7 +179,7 @@ router.get("/filter", async (req, res) => {
     }
 
     if (req.query.precioMin || req.query.precioMax) {
-      query.precio = {}; // minúscula
+      query.precio = {};
       if (req.query.precioMin)
         query.precio.$gte = parseFloat(req.query.precioMin);
       if (req.query.precioMax)
@@ -187,7 +187,7 @@ router.get("/filter", async (req, res) => {
     }
 
     if (req.query.habilitada !== undefined) {
-      query.habilitada = req.query.habilitada === "true"; // minúscula
+      query.habilitada = req.query.habilitada === "true";
     }
 
     const rooms = await Habitacion.find(query);
