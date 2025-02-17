@@ -3,7 +3,6 @@ const router = express.Router();
 const Habitacion = require("../../models/room_model");
 const multer = require("multer");
 const path = require("path");
-const { toUnicode } = require("punycode");
 
 // Configurar `multer` para guardar imágenes en `/uploads`
 const storage = multer.diskStorage({
