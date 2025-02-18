@@ -8,7 +8,7 @@
 
 ## ✨ Descripción
 
-**Node Asgard** es un proyecto construido sobre **Node.js** que busca ofrecer una solución robusta y escalable para [describir brevemente el propósito o funcionalidad principal del proyecto]. Inspirado en la mitología nórdica, *Asgard* representa la fortaleza y agilidad del backend, diseñado para manejar operaciones complejas y ofrecer un rendimiento de alto nivel.
+**Node Asgard** es un proyecto construido sobre **Node.js** que busca ofrecer una solución robusta y escalable para realizar las conexiones entre el back y los fronts de android y wpf. Inspirado en la mitología nórdica, *Asgard* representa la fortaleza y agilidad del backend, diseñado para manejar operaciones complejas y ofrecer un rendimiento de alto nivel.
 
 ---
 
