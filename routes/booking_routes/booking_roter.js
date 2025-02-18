@@ -77,7 +77,7 @@ router.post('/getFreeRooms', async (req, res) => {
     // 1️⃣ Buscar habitaciones ocupadas en el rango de fechas
     const reservasOcupadas = await Reserva.find({
       $and: [
-        { fechaInicio: { $lt: fechaFin } }, // La reserva empieza antes de que termine el rango
+        { fechaInicio: { $lte: fechaFin } }, // La reserva empieza antes de que termine el rango
         { fechaFin: { $gt: fechaInicio } } // La reserva termina después de que empieza el rango
       ]
     }).select('habitacion')
@@ -299,7 +299,7 @@ router.post('/createBooking', async (req, res) => {
     const nuevaReserva = new Reserva({
       codigo: nuevoCodigo,
       fechaInicio: new Date(fechaInicio).setHours(12,0,0,0),
-      fechaFin: new Date(fechaFin).setHours(12,0,0,0),
+      fechaFin: new Date(fechaFin).setHours(11,0,0,0),
       habitacion: new mongoose.Types.ObjectId(habitacion),
       usuario: new mongoose.Types.ObjectId(usuario),
       precio
@@ -350,7 +350,7 @@ router.post('/createBookingWPF', async (req, res) => {
     const nuevaReserva = new Reserva({
       codigo: nuevoCodigo,
       fechaInicio: new Date(fechaInicio).setHours(12,0,0,0),
-      fechaFin: new Date(fechaFin).setHours(12,0,0,0),
+      fechaFin: new Date(fechaFin).setHours(11,0,0,0),
       habitacion: new mongoose.Types.ObjectId(habitacion),
       usuario: new mongoose.Types.ObjectId(usuarioLogeado),
       precio
