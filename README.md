@@ -2,7 +2,6 @@
 
 [![Node.js Version](https://img.shields.io/badge/Node.js-18.x-green?style=for-the-badge)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blueviolet?style=for-the-badge)](LICENSE)
-[![Build Status](https://img.shields.io/github/workflow/status/FranMor97/Node_Asgard/CI?style=for-the-badge)](https://github.com/FranMor97/Node_Asgard/actions)
 [![Contributors](https://img.shields.io/github/contributors/FranMor97/Node_Asgard?style=for-the-badge)](https://github.com/FranMor97/Node_Asgard/graphs/contributors)
 
 ---
