@@ -298,8 +298,8 @@ router.post('/createBooking', async (req, res) => {
     // 🔹 Crear la nueva reserva
     const nuevaReserva = new Reserva({
       codigo: nuevoCodigo,
-      fechaInicio: new Date(fechaInicio),
-      fechaFin: new Date(fechaFin),
+      fechaInicio: new Date(fechaInicio).setHours(12,0,0,0),
+      fechaFin: new Date(fechaFin).setHours(12,0,0,0),
       habitacion: new mongoose.Types.ObjectId(habitacion),
       usuario: new mongoose.Types.ObjectId(usuario),
       precio
@@ -349,8 +349,8 @@ router.post('/createBookingWPF', async (req, res) => {
     // 🔹 Crear la nueva reserva
     const nuevaReserva = new Reserva({
       codigo: nuevoCodigo,
-      fechaInicio: new Date(fechaInicio),
-      fechaFin: new Date(fechaFin),
+      fechaInicio: new Date(fechaInicio).setHours(12,0,0,0),
+      fechaFin: new Date(fechaFin).setHours(12,0,0,0),
       habitacion: new mongoose.Types.ObjectId(habitacion),
       usuario: new mongoose.Types.ObjectId(usuarioLogeado),
       precio
